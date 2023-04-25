@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { copy, linkIcon, loader, tick } from '../assets';
+import { copy, trash, linkIcon, loader, tick } from '../assets';
 import { useLazyGetSummaryQuery } from '../services/article';
 
 const Demo = () => {
@@ -49,6 +49,12 @@ const Demo = () => {
     setTimeout(() => setCopied(false), 3000);
   }
 
+  const handleDelete = (deleteUrl) => {
+    const updatedAllArticles = allArticles.filter(item => item.url !== deleteUrl);
+    setAllArticles(updatedAllArticles);
+    localStorage.setItem('articles', JSON.stringify(updatedAllArticles));
+  }
+
   return (
     <section className='mt-16 w-full max-w-xl'>
       {/* Search */}
@@ -84,7 +90,7 @@ const Demo = () => {
         <div className='flex flex-col gap-1 max-h-60 overflow-y-auto'>
           {allArticles.map((item, index) => (
             <div
-              className='link_card'  
+              className='link_card'
               key={`link-${index}`}
               onClick={() => setArticle(item)}
             >
@@ -98,6 +104,18 @@ const Demo = () => {
                   alt="copy_icon"
                 />
               </div>
+
+              <div
+                className='copy_btn'
+                onClick={() => handleDelete(item.url)}
+              >
+                <img
+                  className='w-[60%] h-[60%] object-contain'
+                  src={trash}
+                  alt="trash_icon"
+                />
+              </div>
+
               <p className='flex-1 font-satoshi text-blue-700 font-medium text-sm truncate'>
                 {item.url}
               </p>
